@@ -26,10 +26,9 @@ As of the current version, the application can only be interacted with via the c
    `pip install -r requirements.txt`
 4. Start the Habit Tracker application using the following command
    `python main.py`
-5. Enter the name of the database to connect to.
-   (E.g. `test.db`)
+5. Enter the name of the database to connect to (e.g. `test.db`)
    
 Note:
-   The project comes with a preexisitng database `test.db`. This database contains 5 predefined habits as well as example task checkoffs for a period of 4 weeks and the corresponding streaks. It can be used to gain an understanding of the application.
-   To work with a new database, enter the preferred database name when prompted. This will create a blank database and connect the application to it. Enter this name again when restarting the application.
+- The project comes with a preexisitng database `test.db`. This database contains 5 predefined habits as well as example task checkoffs for a period of 4 weeks and the corresponding streaks. It can be used to gain an understanding of the application.
+- To work with a new database, enter the preferred database name when prompted. This will create a blank database and connect the application to it. Enter this name again when restarting the application.
  
