@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/23b81a9b-60ac-4a3e-b172-efd5f9690c0d)![image](https://github.com/user-attachments/assets/7ea70d43-1c4d-494a-bd96-a2d1e34f7cfc)# Python Habit Tracker
+# Python Habit Tracker
 
 ## Description
 This project is a Python application designed to help users track their habits. 
