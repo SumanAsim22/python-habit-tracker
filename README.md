@@ -30,5 +30,5 @@ As of the current version, the application can only be interacted with via the c
    
 Note:
 - The project comes with a preexisitng database `test.db`. This database contains 5 predefined habits as well as example task checkoffs for a period of 4 weeks and the corresponding streaks. It can be used to gain an understanding of the application.
-- To work with a new database, enter the preferred database name when prompted. This will create a blank database and connect the application to it. Enter this name again when restarting the application.
+- To work with a new database, enter the preferred database name when prompted (e.g. `main.db`). This will create a blank database and connect the application to it. Enter this name again when restarting the application.
  
