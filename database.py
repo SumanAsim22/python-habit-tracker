@@ -7,6 +7,8 @@ habit, task, and streak tables.
 
 Functions
 ---------
+set_db_name(str) -> None
+    Sets the name of the database to which the application will connect.
 get_db(str) -> sqlite3.Connection:
     Establishes connection to local database.
 execute_query(str, tuple(optional)) -> None
@@ -38,7 +40,23 @@ Notes
 """
 import sqlite3
 
-def get_db(db_name='test.db') -> sqlite3.Connection:
+def set_db_name(name: str) -> None:
+    """
+    Sets the name of the database to which the application will connect.
+
+    Parameters
+    ----------
+    name : str
+        The name of the database.
+    
+    Returns
+    -------
+    None
+    """
+    global db_name 
+    db_name = name
+
+def get_db(db_name) -> sqlite3.Connection:
     """
     Establishes connection to local database.
 
@@ -74,7 +92,7 @@ def execute_query(query: str, values: tuple = None):
     -------
     None
     """
-    db = get_db() 
+    db = get_db(db_name) 
     cur = db.cursor() 
     try: 
         if values: #if values are passed
@@ -111,7 +129,7 @@ def execute_select_query(query: str, values: tuple = None) -> list:
         The query result as a list of rows.
         Each row is represented as a tuple.
     """
-    db = get_db() 
+    db = get_db(db_name) 
     cur = db.cursor() 
     try: 
         if values: 

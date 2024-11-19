@@ -18,13 +18,10 @@ from rich.style import Style
 from rich.console import Console
 from rich.table import Table
 from habits import Habit, Task
-from database import get_db, create_tables, get_all_habits
+from database import set_db_name, get_db, create_tables, get_all_habits
 from analyse import (task_counter, check_streak, update_streak, delete_habit,  
                      get_longest_streak, filter_habits, get_active_streak_counter)
 
-# start database connection and load tables
-get_db('test.db')
-create_tables()
 # style variables for different output types
 cancel_style = Style(color='red')
 info_style= Style(color='green4', bold=True)
@@ -56,10 +53,8 @@ def run_application() -> None:
     Starts the main application.
 
     Asks the user for confirmation before presenting the main menu
-    for the next action. The application runs until the user 
-    selects 'Exit'. 
-    Enables all the application functionality through 
-    CLI prompts and menus.
+    for the next action. The application runs until the user selects 'Exit'. 
+    Enables all the application functionality through CLI prompts and menus.
     
     Parameters
     ----------
@@ -74,6 +69,14 @@ def run_application() -> None:
     Methods from the Questionary and Rich libraries are used for 
     user prompts and formatted outputs, respectively.
     """
+    # set database name 
+    db_name = questionary.text('Enter database name: ', default='test.db').ask()
+    set_db_name(db_name)
+    # start database connection and create tables
+    get_db(db_name)
+    create_tables()
+    print(f'Connected to database {db_name}')
+
     # define option lists for selection menus
     main_menu_options = ['Create new habit', 'Manage habits', 'Analyse habits', 'Exit']
     frequency_options = ['Daily', 'Weekly']
