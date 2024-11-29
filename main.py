@@ -74,6 +74,7 @@ def run_application() -> None:
     set_db_name(db_name)
     # start database connection and create tables
     get_db(db_name)
+    create_tables()
     print(f'Connected to database {db_name}')
 
     # define option lists for selection menus

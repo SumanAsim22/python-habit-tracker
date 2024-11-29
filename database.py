@@ -10,7 +10,7 @@ Functions
 set_db_name(str) -> None
     Sets the name of the database to which the application will connect.
 get_db(str) -> sqlite3.Connection:
-    Establishes connection to local database and calls method to create tables.
+    Establishes connection to local database.
 execute_query(str, tuple(optional)) -> None
     Executes a SQL query (except SELECT queries).
 execute_select_query(str, tuple(optional)) -> list
@@ -58,7 +58,7 @@ def set_db_name(name: str) -> None:
 
 def get_db(db_name) -> sqlite3.Connection:
     """
-    Establishes connection to local database and calls method to create tables.
+    Establishes connection to local database.
 
     Parameters
     ----------
@@ -71,7 +71,6 @@ def get_db(db_name) -> sqlite3.Connection:
         The database connection object.
     """
     db = sqlite3.connect(db_name)
-    create_tables()
     return db
 
 def execute_query(query: str, values: tuple = None): 
@@ -102,7 +101,7 @@ def execute_query(query: str, values: tuple = None):
             cur.execute(query) 
         db.commit() 
     except Exception as e: 
-        print(f"An error occurred: {e}") 
+        print(f'An error occurred: {e}') 
         db.rollback()
     finally: 
         db.close()
@@ -140,7 +139,7 @@ def execute_select_query(query: str, values: tuple = None) -> list:
         results = cur.fetchall() 
         return results 
     except Exception as e: 
-        print(f"An error occurred: {e}") 
+        print(f'An error occurred: {e}') 
         return None 
     finally: 
         db.close()
