@@ -27,15 +27,22 @@ As of the current version, the application can only be interacted with via the c
 5. Start the Habit Tracker application using the following command: `python main.py`
 6. Enter the name of the database to connect to (e.g. `test.db`).
 
-Note:
+**Note:**
 - The project comes with a preexisitng database `test.db`. This database contains 5 predefined habits as well as example task checkoffs for a period of 4 weeks and the corresponding streaks. It can be used to gain an understanding of the application.
 - To work with a new database, enter the preferred database name when prompted (e.g. `main.db`). This will create a blank database and connect the application to it. When restarting the application, enter this name again to load the stored data.
 
 ## Example usage
 - Enter database name and start the application.
-- Creating a new habit: Select 'Create new habit' from the main menu -> Enter habit details as prompted -> Confirm habit creation
-- Checking off a habit: Select 'Manage habits' from the main menu -> Select 'Checkoff a habit' from the sub-menu -> Select the required habit to checkoff -> Navigate to 'Manage habits' again to view the changes in the table
-- Note: To maintain a streak, daily habits need to be checked off at least once every day, and weekly habits need to be checked off at least once every week (a week is calculated from each Monday to Sunday). A new streak starts whenever a streak is broken.
+- Creating a new habit: 
+   -> Select 'Create new habit' from the main menu 
+   -> Enter habit details as prompted 
+   -> Confirm habit creation
+- Checking off a habit: 
+   -> Select 'Manage habits' from the main menu 
+   -> Select 'Checkoff a habit' from the sub-menu 
+   -> Select the required habit to checkoff 
+   -> Navigate to 'Manage habits' again to view the changes in the table
+**Note:** To maintain a streak, daily habits need to be checked off at least once every day, and weekly habits need to be checked off at least once every week (a week is calculated from each Monday to Sunday). A new streak starts whenever a streak is broken.
 
 ## Testing with Pytest
 - This project uses pytest for testing. 
