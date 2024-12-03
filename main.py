@@ -14,13 +14,13 @@ run_application() -> None
 """
 
 import questionary
-from rich.style import Style
 from rich.console import Console
+from rich.style import Style
 from rich.table import Table
-from habits import Habit, Task
-from database import set_db_name, get_db, create_tables, get_all_habits
-from analyse import (task_counter, check_streak, update_streak, delete_habit,  
-                     get_longest_streak, filter_habits, get_active_streak_counter)
+from habit_analytics import (count_tasks, check_streak, delete_habit, filter_habits, 
+                     get_active_streak_counter, get_longest_streak, update_streak)
+from database import create_tables, get_all_habits, get_db, set_db_name
+from habit_classes import Habit, Task
 
 # style variables for different output types
 cancel_style = Style(color='red')
@@ -70,7 +70,7 @@ def run_application() -> None:
     user prompts and formatted outputs, respectively.
     """
     # set database name 
-    db_name = questionary.text('Enter database name: ', default='test.db').ask()
+    db_name = questionary.text('Enter database name (e.g. test.db): ').ask()
     set_db_name(db_name)
     # start database connection and create tables
     get_db(db_name)
@@ -154,7 +154,7 @@ def run_application() -> None:
                         streak_count = 0
                     else: 
                         streak_count = active_counter[1]
-                    task_count = task_counter(title) #get number of checkoffs for habit
+                    task_count = count_tasks(title) #get number of checkoffs for habit
                     table.add_row(title, descr, freq, str(streak_count), str(task_count))
                 console.print(table)
 
@@ -248,7 +248,7 @@ def run_application() -> None:
                             table.add_column('Habit', justify='left', style='cyan', no_wrap=True)
                             table.add_column('Count', style='magenta')
                             for title in matched_list:
-                                count = task_counter(title)
+                                count = count_tasks(title)
                                 table.add_row(title, str(count))
                             console.print(table)
                     # 'Cancel' option                        
@@ -277,7 +277,7 @@ def run_application() -> None:
                 console.print('No habits found', style=cancel_style)
         # 'Exit' option 
         else:
-            is_user_ready = False #stop loop
+            is_user_ready = False # stop loop
             console.print('Application stopped by user', style=cancel_style)
 
 if __name__ == '__main__':
