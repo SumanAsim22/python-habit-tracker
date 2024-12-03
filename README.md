@@ -43,7 +43,8 @@ As of the current version, the application can only be interacted with via the c
     3. Select the required habit to checkoff 
     4. Navigate to 'Manage habits' again to view the changes in the table
 
-**Note:** To maintain a streak, daily habits need to be checked off at least once every day, and weekly habits need to be checked off at least once every week (a week is calculated from each Monday to Sunday). A new streak starts whenever a streak is broken.
+**Note on streaks:** 
+To maintain a streak, daily habits need to be checked off at least once every day, and weekly habits need to be checked off at least once every week (a week is calculated from each Monday to Sunday). A new streak starts whenever a streak is broken.
 
 ## Testing with Pytest
 - This project uses pytest for testing. 
