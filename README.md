@@ -47,6 +47,6 @@ As of the current version, the application can only be interacted with via the c
 
 ## Testing with Pytest
 - This project uses pytest for testing. 
-- Pytest is installed as part of the project's requirements (see **Installation and Running** - step 4).
+- Pytest is installed as part of the project's requirements (see **Installation and Running** - step 3).
 - The unit test suite for the project is found in `test_habit_tracker.py`
 - To run the test, execute the following command in the project directory: `pytest`
