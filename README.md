@@ -34,14 +34,14 @@ As of the current version, the application can only be interacted with via the c
 ## Example usage
 - Enter database name and start the application.
 - Creating a new habit: 
-    * Select 'Create new habit' from the main menu 
-    * Enter habit details as prompted 
-    * Confirm habit creation
+    1. Select 'Create new habit' from the main menu 
+    2. Enter habit details as prompted 
+    3. Confirm habit creation
 - Checking off a habit: 
-    * Select 'Manage habits' from the main menu 
-    * Select 'Checkoff a habit' from the sub-menu 
-    * Select the required habit to checkoff 
-    * Navigate to 'Manage habits' again to view the changes in the table
+    1. Select 'Manage habits' from the main menu 
+    2. Select 'Checkoff a habit' from the sub-menu 
+    3. Select the required habit to checkoff 
+    4. Navigate to 'Manage habits' again to view the changes in the table
 
 **Note:** To maintain a streak, daily habits need to be checked off at least once every day, and weekly habits need to be checked off at least once every week (a week is calculated from each Monday to Sunday). A new streak starts whenever a streak is broken.
 
