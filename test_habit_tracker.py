@@ -1,3 +1,17 @@
+""" 
+Unit test suite for the Habit Tracker application. 
+
+This module contains unit tests for the core functionalities of the Habit Tracker, 
+including habit creation, streak management, and analytical functions.
+
+To run these tests, use the following command in the project directory: 
+pytest 
+
+Dependencies: 
+- pytest 
+- datetime 
+"""
+
 import pytest
 from datetime import date, timedelta
 from habit_analytics import (check_streak, count_tasks, delete_habit, filter_habits,
