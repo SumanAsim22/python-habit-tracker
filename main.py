@@ -18,7 +18,7 @@ from rich.console import Console
 from rich.style import Style
 from rich.table import Table
 from habit_analytics import (count_tasks, check_streak, delete_habit, filter_habits, 
-                     get_active_streak_counter, get_longest_streak, update_streak)
+                     get_active_streak_counter, get_longest_streak, get_streak_history, update_streak)
 from database import create_tables, get_all_habits, get_db, set_db_name, get_task_list
 from habit_classes import Habit, Task
 
@@ -81,7 +81,8 @@ def run_application() -> None:
     main_menu_options = ['Create new habit', 'Manage habits', 'Analyse habits', 'Exit']
     frequency_options = ['Daily', 'Weekly']
     habit_management_options = ['Checkoff habit', 'Delete habit', 'Return to main menu']
-    habit_analysis_options = ['Filter habits', 'Get longest streak', 'Return to main menu']
+    habit_analysis_options = ['Filter habits', 'Get longest streak', 'Get streak history', \
+                              'Get task checkoffs', 'Return to main menu']
     filter_options = ['Frequency', 'Streak status', 'Checkoff count', 'Cancel']
     streak_status_options = ['Active', 'Inactive']
  
@@ -102,6 +103,7 @@ def run_application() -> None:
         # 'Create new habit' option
         if main_menu == 'Create new habit':
             console.print('\n-----New habit form-----', style=title_style)
+            console.print('**Habit creation can be cancelled at the end of form completion**')
             # display habit creation form and get individual values
             habit_details = questionary.form(
                 title = questionary.text('Enter habit title: ',
@@ -161,12 +163,12 @@ def run_application() -> None:
                     if task_count > 0:
                         # get latest checkoff date from task list
                         task_list = get_task_list(title)
-                        latest_checkoff = task_list[task_list.__len__() - 1][1]
+                        latest_checkoff = task_list[task_count - 1][1]
                     else:
                         latest_checkoff = 'No checkoffs'
 
                     table.add_row(title, descr, freq, str(streak_count), str(task_count), str(latest_checkoff))
-                    
+
                 console.print(table)
                 console.print('Note: A streak will only be started\
                               \n-> for a daily habit if it has been checked off for two consecutive days\
@@ -285,6 +287,46 @@ def run_application() -> None:
                     else:
                         longest_streak = get_longest_streak(habit_title)
                         console.print(f'Longest streak for \'{habit_title}\': {str(longest_streak)}', style=info_style)
+
+                elif analysis_function == 'Get streak history': 
+                    habit_title = questionary.select('Select a habit for the function:', 
+                                        choices=title_options).ask()
+                    
+                    if habit_title == 'Cancel':
+                        pass
+                    else:
+                        streak_start_dates, streak_end_dates = get_streak_history(habit_title)
+                        list_length = streak_start_dates.__len__()
+                        if list_length == 0:
+                            # if lists are empty i.e. no streaks have been established
+                            console.print(f'No streaks found for {habit_title}', style=cancel_style)
+                        else:
+                            table = Table()
+                            table.add_column('Start date', justify='center', style='cyan', no_wrap=True)
+                            table.add_column('Last update', justify='center', style='cyan', no_wrap=True)
+                            for i in range(list_length): 
+                                table.add_row(streak_start_dates[i], streak_end_dates[i]) 
+                            console.print(f'\n--Streak history for {habit_title}--', style=title_style)
+                            console.print(table)
+                        # get and display streak status 
+                        if check_streak(habit_title): status = 'Active'
+                        else: status = 'Inactive'
+                        console.print(f'Streak status: {status}')
+
+                elif analysis_function == 'Get task checkoffs':
+                    habit_title = questionary.select('Select a habit for the function:', 
+                                        choices=title_options).ask()
+
+                    if habit_title == 'Cancel':
+                        pass
+                    else:
+                        table=Table()
+                        table.add_column('Checkoffs', style='cyan', no_wrap=True)
+                        for task in get_task_list(habit_title):
+                            table.add_row(task[1])
+                        console.print(table)
+                        console.print(f'Total count: {count_tasks(habit_title)}')
+                        
                 # 'Return to main menu' option
                 else: 
                     pass  

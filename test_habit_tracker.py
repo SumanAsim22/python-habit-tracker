@@ -1,7 +1,7 @@
 import pytest
 from datetime import date, timedelta
-from habit_analytics import (check_streak, count_tasks, delete_habit, 
-                     filter_habits, get_longest_streak, update_streak)
+from habit_analytics import (check_streak, count_tasks, delete_habit, filter_habits,
+                            get_longest_streak, get_streak_history, update_streak)
 from database import (create_tables, execute_query, get_all_habits, 
                       get_streak_list, get_task_list, set_db_name)
 from habit_classes import Habit, Task
@@ -125,6 +125,19 @@ def test_get_longest_streak(setup_method):
     longest_streak = get_longest_streak(habit_title)
     assert longest_streak == 2, 'Function error - longest streak for habit should be 2'
 
+def test_get_streak_history(setup_method):
+    setup_streak_data()
+    update_streak(habit_title)
+
+    task_list = get_task_list(habit_title)
+    count = count_tasks(habit_title)
+    streak_list = get_streak_list(habit_title)
+
+    start_date, last_updated = get_streak_history(habit_title)
+    # assert that first checkoff is in list of start dates and latest checkoff is in list of end dates  
+    assert task_list[count-2][1] in start_date and streak_list[0][2] in last_updated,\
+            'Function error - streak start and end values should be found in lists'
+
 # Test for deleting a habit
 def test_delete_habit(setup_method):
     Habit(habit_title, 'Test description', 'Daily')
@@ -137,4 +150,5 @@ def test_delete_habit(setup_method):
     tasks = get_task_list(habit_title)
 
     # assert complete deletion of the habit from all database tables
-    assert not any(habit[0] == habit_title for habit in habits) and streaks == [] and tasks == [] 
+    assert not any(habit[0] == habit_title for habit in habits) and streaks == [] and tasks == [],\
+            'Habit entries should be deleted from all tables'

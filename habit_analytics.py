@@ -20,10 +20,12 @@ get_active_streak_counter(str) -> tuple
     Gets the active streak counter associated with a given habit.
 delete_habit(str) -> None
     Deletes the habit with the given title.
-get_longest_streak(str)
-    Gets the longest streak for the given habit.
 filter_habits(str or int)) -> list
     Filters habits based on the provided filter criteria.
+get_longest_streak(str)
+    Gets the longest streak for the given habit.
+get_streak_history(str) -> tuple
+    Generates the streak history for the given habit, with start and end dates.
 """
 
 from datetime import date, timedelta, datetime
@@ -214,6 +216,56 @@ def delete_habit(habit_title: str) -> None:
     None
     """
     delete_habit_from_db(habit_title)
+            
+def filter_habits(filter) -> list:
+    """
+    Filters habits based on the provided filter criteria.
+
+    Parameters
+    ----------
+    filter
+        The filter against which the habits are to be matched.
+        Should be a string or an integer.
+
+    Returns
+    -------
+    list
+        A list of habit titles that match the specified filter criteria.
+
+    Notes 
+    ----- 
+    - If the filter is 'Daily' or 'Weekly', habits are filtered by their frequency value. 
+    - If the filter is 'Active' or 'Inactive', habits are filtered by their streak status. 
+    - If the filter is a task count, habits are filtered based on the number of task checkoffs.
+    """
+    # retrieve all habits from the database 
+    habit_list = get_all_habits()
+    # extract the title value from each tuple in habit_list
+    habit_titles = [habit[0] for habit in habit_list]
+    matched_list = []
+
+    if filter == 'Daily' or filter == 'Weekly':
+        # compare frequency filter with each habit's frequency and add title
+        for habit in habit_list:
+            if habit[2] == filter: 
+                matched_list.append(habit[0]) 
+    elif filter == 'Active' or filter == 'Inactive':
+        if filter == 'Active': 
+            status = True
+        else: 
+            status = False
+        # compare streak status filter with each habit's status and add title
+        for title in habit_titles:
+            streak_status = check_streak(title)
+            if streak_status == status: 
+                matched_list.append(title)   
+    else: # if filter is Task count
+        # compare task count value with each habit's task count and add title
+        for title in habit_titles:
+            count = count_tasks(title)
+            if count >= filter:
+                matched_list.append(title)
+    return matched_list
 
 def get_longest_streak(habit_title: str):
     """
@@ -265,53 +317,59 @@ def get_longest_streak(habit_title: str):
             max_count = 0
         return max_count
 
-def filter_habits(filter) -> list:
+def get_streak_history(habit_title: str) -> tuple:
     """
-    Filters habits based on the provided filter criteria.
+    Generatres the streak history for the given habit, with start and end dates.
 
     Parameters
     ----------
-    filter
-        The filter against which the habits are to be matched.
-        Should be a string or an integer.
+    habit_title : str
+        The title of the habit for which the streak history is to be generated.
 
     Returns
     -------
-    list
-        A list of habit titles that match the specified filter criteria.
-
-    Notes 
-    ----- 
-    - If the filter is 'Daily' or 'Weekly', habits are filtered by their frequency value. 
-    - If the filter is 'Active' or 'Inactive', habits are filtered by their streak status. 
-    - If the filter is a task count, habits are filtered based on the number of task checkoffs.
+    tuple
+        Two lists containing the dates on which streaks were started and the dates
+        on which they ended (or were last updated), respectively.
     """
-    # retrieve all habits from the database 
+    streak_list = get_streak_list(habit_title)
+    # find corresponding habit title in habit list and retrieve frequency (i.e. habit[2])
     habit_list = get_all_habits()
-    # extract the title value from each tuple in habit_list
-    habit_titles = [habit[0] for habit in habit_list]
-    matched_list = []
+    habit_freq = next(habit[2] for habit in habit_list if habit_title == habit[0])
+    #initialize list variables
+    streak_start_dates = []
+    streak_end_dates = []
 
-    if filter == 'Daily' or filter == 'Weekly':
-        # compare frequency filter with each habit's frequency and add title
-        for habit in habit_list:
-            if habit[2] == filter: 
-                matched_list.append(habit[0]) 
-    elif filter == 'Active' or filter == 'Inactive':
-        if filter == 'Active': 
-            status = True
-        else: 
-            status = False
-        # compare streak status filter with each habit's status and add title
-        for title in habit_titles:
-            streak_status = check_streak(title)
-            if streak_status == status: 
-                matched_list.append(title)   
-    else: # if filter is Task count
-        # compare task count value with each habit's task count and add title
-        for title in habit_titles:
-            count = count_tasks(title)
-            if count >= filter:
-                matched_list.append(title)
-    return matched_list
+    if habit_freq == 'Daily':
+        for streak in streak_list:
+            # execute only for established streaks
+            if streak[1] != 1:
+                # get last updated date of the streak as date object
+                last_updated = datetime.strptime(streak[2], '%Y-%m-%d').date()
+                # get the date on which the streak started
+                start_date = last_updated - timedelta(days=streak[1]-1)
 
+                streak_start_dates.append(str(start_date))
+                streak_end_dates.append(streak[2])
+
+    else: # if weekly
+        for streak in streak_list:
+            # get last updated date of the streak as date object
+            last_updated = datetime.strptime(streak[2], '%Y-%m-%d').date()
+            # get monday's date for the week in which the last update for the streak occured
+            monday = last_updated - timedelta(days=last_updated.weekday())
+            # get the number of weeks that contributed to the streak
+            number_of_weeks = streak[1] 
+            # get the list of dates for the week in which the streak started
+            streak_start_week = [(monday - timedelta(weeks=number_of_weeks-1)) + timedelta(days=i) for i in range(7)]
+            task_list = get_task_list(habit_title)
+            for task in task_list:
+                # find the date on which the streak started by comparing with task checkoff dates 
+                for date in streak_start_week:
+                    if task[1] == str(date):
+                        # add values to lists once start date is found
+                        streak_start_dates.append(task[1])
+                        streak_end_dates.append(streak[2])
+                        break
+
+    return streak_start_dates, streak_end_dates

@@ -6,9 +6,10 @@ It allows users to create, view, and delete habits, as well as track their progr
 As of the current version, the application can only be interacted with via the command line.
 
 ## Features 
-- Add new habits with a title, description, and frequency
+- Create new habits with a title, description, and frequency
 - View all habits in a structured table
 - Checkoff habit tasks and establish streaks
+- View task checkoffs and streak histories
 - Filter habits based on frequency (daily/weekly), streak status (active/inactive), and task checkoff count
 - Track and view longest streaks
 - Interact with CLI menus and receive clear outputs
