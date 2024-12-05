@@ -153,13 +153,16 @@ def update_streak(habit_title: str) -> None:
         # get last updated date value and convert to date object for accurate comparison
         last_updated_str = active_streak_counter[2] 
         last_updated = datetime.strptime(last_updated_str, '%Y-%m-%d').date()
-        today = date.today()  
         # find corresponding habit title in habit list and retrieve frequency (i.e. habit[2])
         habit_list = get_all_habits()
         habit_freq = next(habit[2] for habit in habit_list if habit_title == habit[0])
+
+        # if daily freqeuncy
+        today = date.today()  
         # update counter if streak has not already been updated today
         if habit_freq == 'Daily' and last_updated != today: 
             update_streak_counter(habit_title, today)
+
         else: # if weekly frequency
             # find the most recent monday -- monday = 0 and sunday = 6 
             last_monday = today - timedelta(days=today.weekday())
@@ -167,6 +170,7 @@ def update_streak(habit_title: str) -> None:
             # update counter if streak has not already been updated within the current week
             if last_updated not in current_week_dates: 
                 update_streak_counter(habit_title, today)
+
     elif active_streak_counter[1] > 1: 
         """
         If the habit streak is False but the streak counter is 1, then no changes have to 
@@ -289,7 +293,7 @@ def filter_habits(filter) -> list:
     matched_list = []
 
     if filter == 'Daily' or filter == 'Weekly':
-        # compare frequency value and add title
+        # compare frequency filter with each habit's frequency and add title
         for habit in habit_list:
             if habit[2] == filter: 
                 matched_list.append(habit[0]) 
@@ -298,12 +302,13 @@ def filter_habits(filter) -> list:
             status = True
         else: 
             status = False
-            # compare streak status and add title
+        # compare streak status filter with each habit's status and add title
         for title in habit_titles:
             streak_status = check_streak(title)
             if streak_status == status: 
                 matched_list.append(title)   
     else: # if filter is Task count
+        # compare task count value with each habit's task count and add title
         for title in habit_titles:
             count = count_tasks(title)
             if count >= filter:

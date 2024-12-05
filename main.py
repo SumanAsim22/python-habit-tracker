@@ -19,7 +19,7 @@ from rich.style import Style
 from rich.table import Table
 from habit_analytics import (count_tasks, check_streak, delete_habit, filter_habits, 
                      get_active_streak_counter, get_longest_streak, update_streak)
-from database import create_tables, get_all_habits, get_db, set_db_name
+from database import create_tables, get_all_habits, get_db, set_db_name, get_task_list
 from habit_classes import Habit, Task
 
 # style variables for different output types
@@ -70,7 +70,7 @@ def run_application() -> None:
     user prompts and formatted outputs, respectively.
     """
     # set database name 
-    db_name = questionary.text('Enter database name (e.g. test.db): ').ask()
+    db_name = questionary.text('Enter database name (e.g. test.db): ', default ='test.db').ask()
     set_db_name(db_name)
     # start database connection and create tables
     get_db(db_name)
@@ -139,9 +139,10 @@ def run_application() -> None:
                 table.add_column('Frequency', style='green', no_wrap=True)
                 table.add_column('Current streak', justify='center', style='yellow', no_wrap=True)
                 table.add_column('Checkoff count', justify='center', style='dark_orange', no_wrap=True)
-
+                table.add_column('Last checkoff', style='blue', no_wrap=True)
                 for habit in habit_list:
                     title, descr, freq, creation_date = habit
+
                     # get active streak counter to get latest streak count
                     active_counter = get_active_streak_counter(title)
                     if active_counter[1] == 1:
@@ -154,9 +155,23 @@ def run_application() -> None:
                         streak_count = 0
                     else: 
                         streak_count = active_counter[1]
-                    task_count = count_tasks(title) #get number of checkoffs for habit
-                    table.add_row(title, descr, freq, str(streak_count), str(task_count))
+
+                    # get number of checkoffs for habit
+                    task_count = count_tasks(title) 
+                    if task_count > 0:
+                        # get latest checkoff date from task list
+                        task_list = get_task_list(title)
+                        latest_checkoff = task_list[task_list.__len__() - 1][1]
+                    else:
+                        latest_checkoff = 'No checkoffs'
+
+                    table.add_row(title, descr, freq, str(streak_count), str(task_count), str(latest_checkoff))
+                    
                 console.print(table)
+                console.print('Note: A streak will only be started\
+                              \n-> for a daily habit if it has been checked off for two consecutive days\
+                              \n-> for a weekly habit if it has been checked off at least once for two consecutive weeks',\
+                              style=info_style)
 
                 # display next set of actions relating to user's habit list
                 menu = questionary.select('\nWhat would you like to do?', 
