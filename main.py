@@ -299,14 +299,14 @@ def run_application() -> None:
                         list_length = streak_start_dates.__len__()
                         if list_length == 0:
                             # if lists are empty i.e. no streaks have been established
-                            console.print(f'No streaks found for {habit_title}', style=cancel_style)
+                            console.print(f'No streaks found for \'{habit_title}\'', style=cancel_style)
                         else:
                             table = Table()
                             table.add_column('Start date', justify='center', style='cyan', no_wrap=True)
                             table.add_column('Last update', justify='center', style='cyan', no_wrap=True)
                             for i in range(list_length): 
                                 table.add_row(streak_start_dates[i], streak_end_dates[i]) 
-                            console.print(f'\n--Streak history for {habit_title}--', style=title_style)
+                            console.print(f'\n--Streak history for \'{habit_title}\'--', style=title_style)
                             console.print(table)
                         # get and display streak status 
                         if check_streak(habit_title): status = 'Active'
