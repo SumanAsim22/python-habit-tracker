@@ -117,7 +117,7 @@ def run_application() -> None:
                 f'Do you want to create the {habit_details['freq']} habit \'{habit_details['title']}\'?').ask()
             if creation_confirmed:
                 # check if the habit title already exists
-                habit_exists = any(habit_details['title'] == habit[0] for habit in habit_list)
+                habit_exists = any(habit_details['title'].lower() == habit[0].lower() for habit in habit_list)
                 if habit_exists:
                     console.print('Habit title already exists - please enter a different title', style=cancel_style)
                 else:
