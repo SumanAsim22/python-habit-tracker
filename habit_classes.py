@@ -1,8 +1,10 @@
 """
 Class definition module for the Habit Tracker application.
 
-This module defines the class structure for the classes
-Habit, Task, and Streak.
+This module contains the class structure definitions for the 
+application, including the Habit, Task, and Streak classes.
+These models represent the core entities used in the application to track 
+user habits and their progress.
 """
 
 from datetime import date
@@ -10,7 +12,7 @@ from database import add_habit, add_streak, add_task_checkoff
 
 class Habit:
     """
-    A class to represent a habit.
+    A class to represent a habit created by the user.
 
     Attributes:
     ----------
@@ -28,10 +30,7 @@ class Habit:
     ------- 
     __init__(title, descr, freq, creation_date): 
         Declares all the necessary attributes for the habit object and
-        calls the add_habit method (imported from database.py)
-        to add the habit to the database.
-        Also calls the Streak class constructor to initialize a streak object 
-        when a habit is created.
+        adds the habit to the database.
     """
     def __init__(self, title: str, descr: str, freq: str):
         """ 
@@ -60,7 +59,7 @@ class Habit:
 
 class Task(Habit):
     """
-    A subclass of Habit to represent a task checkoff for a habit.
+    A subclass of Habit to represent a single task checkoff for a habit.
 
     Attributes:
     ----------
@@ -74,8 +73,7 @@ class Task(Habit):
     ------- 
     __init__(habit_title): 
         Declares all the necessary attributes for the task object and
-        calls the add_task_checkoff method (imported from database.py)
-        to add the task checkoff to the database.
+        adds the task checkoff to the database.
     """
     def __init__(self, habit_title: str):
         """
@@ -94,7 +92,8 @@ class Task(Habit):
 
 class Streak(Habit):
     """
-    A subclass of Habit to represent a tracked streak for a habit.
+    A subclass of Habit to represent a streak of consecutive checkoffs
+    for a habit.
 
     Attributes:
     ----------
@@ -111,8 +110,7 @@ class Streak(Habit):
     ------- 
     __init__(habit_title): 
         Declares all the necessary attributes for the streak object and
-        calls the add_streak method (imported from database.py)
-        to add the streak to the database.
+        adds the streak to the database.
     """
     def __init__(self, habit_title):
         """
