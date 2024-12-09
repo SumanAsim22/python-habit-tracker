@@ -24,7 +24,7 @@ As of the current version, the application can only be interacted with via the c
 1. Clone the repository:
    `git clone https://github.com/SumanAsim22/python-habit-tracker.git`
    (For more information on cloning, please visit [this link](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).)
-3. Navigate to the directory where the project is located (e.g. `cd .\python-habit-tracker`).
+3. Navigate to the directory where the project is located: `cd .\python-habit-tracker`
 4. Install the dependencies listed in the `requirements.txt` file using the command: `pip install -r requirements.txt`
 5. Start the Habit Tracker application using the following command: `python main.py`
 6. Enter the name of the database to connect to in the format ***.db** (e.g. `test.db`).
