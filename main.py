@@ -40,7 +40,7 @@ def is_number(value: str) -> bool:
     Returns
     -------
     bool
-        True if value is an integer False if not
+        True if value is an integer and False if not.
     """
     try: 
         int(value) 
@@ -52,8 +52,9 @@ def run_application() -> None:
     """
     Starts the main application.
 
-    Asks the user for confirmation before presenting the main menu
-    for the next action. The application runs until the user selects 'Exit'. 
+    Asks the user for the database name and start confirmation 
+    before presenting the main menu. 
+    The application runs until the user selects 'Exit'. 
     Enables all the application functionality through CLI prompts and menus.
     
     Parameters
