@@ -22,7 +22,7 @@ As of the current version, the application can only be interacted with via the c
 
 ## Installation and Running
 1. Clone the repository:
-   `git clone https://github.com/yourusername/python-habit-tracker.git`
+   `git clone https://github.com/SumanAsim22/python-habit-tracker.git`
 2. Navigate to the directory where the project is located.
 3. Install the dependencies listed in the `requirements.txt` file using the command: `pip install -r requirements.txt`
 4. Start the Habit Tracker application using the following command: `python main.py`
